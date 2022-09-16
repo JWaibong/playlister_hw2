@@ -281,6 +281,7 @@ class App extends React.Component {
         let canClose = this.state.currentList !== null;
         return (
             <div id="root">
+                <link href='https://fonts.googleapis.com/css?family=Tangerine' rel='stylesheet'></link>
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}

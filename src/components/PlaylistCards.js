@@ -18,6 +18,7 @@ export default class PlaylistCards extends React.Component {
                             <SongCard
                                 id={'playlist-song-' + (index+1)}
                                 key={'playlist-song-' + (index+1)}
+                                index={index}
                                 song={song}
                                 moveCallback={moveSongCallback}
                             />
