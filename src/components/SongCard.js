@@ -53,7 +53,7 @@ export default class SongCard extends React.Component {
         }));
 
         // ASK THE MODEL TO MOVE THE DATA
-        console.log(sourceId, targetId)
+        // console.log(sourceId, targetId)
         this.props.moveCallback(sourceId, targetId);
     }
 

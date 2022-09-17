@@ -189,15 +189,19 @@ class App extends React.Component {
     }
     // THIS FUNCTION BEGINS THE PROCESS OF CLOSING THE CURRENT LIST
     closeCurrentList = () => {
+        if (this.state.currentList === null) return;
+        this.tps.clearAllTransactions();
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             currentList: null,
             sessionData: this.state.sessionData
-        }), () => {
+        }) 
+        //() => {
+            // REMOVED BECAUSE I WANT TO CLEAR TRANSACTIONS BEFORE SETTING NEW STATE 
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
-            this.tps.clearAllTransactions();
-        });
+         //   this.forceUpdate();}
+         );
     }
     setStateWithUpdatedList(list) {
         this.setState(prevState => ({
@@ -244,6 +248,7 @@ class App extends React.Component {
     }
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING AN UNDO
     undo = () => {
+        if (this.state.currentList === null) return;
         if (this.tps.hasTransactionToUndo()) {
             //console.log("here")
             this.tps.undoTransaction();
@@ -253,6 +258,7 @@ class App extends React.Component {
     }
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING A REDO
     redo = () => {
+        if (this.state.currentList === null) return;
         if (this.tps.hasTransactionToRedo()) {
             this.tps.doTransaction();
 
@@ -302,9 +308,10 @@ class App extends React.Component {
         modal.classList.add("is-visible");
     }
     // THIS FUNCTION IS FOR HIDING THE MODAL
-    hideDeleteListModal() {
+    hideDeleteListModal = () => {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
+        this.setState(prev => ({...prev, listKeyPairMarkedForDeletion: null}))
     }
 
     showEditSongModal() {
@@ -329,6 +336,7 @@ class App extends React.Component {
     }
 
     addDeleteSongTransaction = (idx, song) => {
+        
         let transaction = new DeleteSong_Transaction(this, idx, song);
         this.tps.addTransaction(transaction);
     }
@@ -350,6 +358,7 @@ class App extends React.Component {
 
 
     addAddSongTransaction = () => {
+        if (this.state.currentList === null) return;
         let transaction = new AddSong_Transaction(this);
         this.tps.addTransaction(transaction);
     }
@@ -384,11 +393,24 @@ class App extends React.Component {
         }
     }
 
+    // TODO disable all buttons when editing/deleting/changing playlist name
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
-        let canClose = this.state.currentList !== null;
+        let canClose = this.state.currentList !== null; // canAddList = !canClose
+
+        if (this.state.listKeyPairMarkedForDeletion !== null || this.state.songMarkedForDeleting !== null || this.state.songMarkedForEditing !== null) {
+            canAddSong = false;
+            canUndo = false;
+            canRedo = false;
+            canClose = false;
+        }
+
+
+        //console.log(`${canClose}`)
+
+
         return (
             <div id="root"
             tabIndex={0}
@@ -397,6 +419,7 @@ class App extends React.Component {
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
+                    canAddList={!canClose}
                 />
                 <SidebarList
                     currentList={this.state.currentList}

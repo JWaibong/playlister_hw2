@@ -169,6 +169,9 @@ body {
 input {
   font-size:20pt;
 }
+.disabled {
+  opacity: 50%;
+}
 
 /* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
 
