@@ -370,13 +370,29 @@ class App extends React.Component {
 
     }
 
+    handleKeyBoardShortCuts = (e) => {
+        //console.log(`${e.ctrlKey}, ${e.keyCode}`);
+        if (!e.ctrlKey) {
+            return;
+        }
+
+        if (e.keyCode == 90) {
+            this.undo();
+        }
+        else if (e.keyCode == 89) {
+            this.redo();
+        }
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
         return (
-            <div id="root">
+            <div id="root"
+            tabIndex={0}
+            onKeyDown={e => this.handleKeyBoardShortCuts(e)}>
                 <link href='https://fonts.googleapis.com/css?family=Tangerine' rel='stylesheet'></link>
                 <Banner />
                 <SidebarHeading
@@ -404,6 +420,7 @@ class App extends React.Component {
                     moveSongCallback={this.addMoveSongTransaction}
                     markSongForEditingCallback={this.markSongForEditing} 
                     markSongForDeletionCallback = {this.markSongForDeletion} />
+
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
