@@ -1,34 +1,5 @@
-import React, { useState, useEffect,Component} from 'react';
+import React, { useState, useEffect} from 'react';
 
-/*export default class EditSongModal extends Component {
-
-    constructor(props) {
-        super(props);
-        const {song} = props;
-        this.state = {
-            title: `${song !== null ? `${song.title}` : ""}`,
-            artist: `${song !== null ? `${song.artist}` : ""}`,
-            youTubeId: `${song !== null ? `${song.youTubeId}` : ""}`,
-        }
-    }
-    
-    setTitle = (title) => {
-        this.setState(prev => ({...prev, title}))
-    }
-
-    setArtist = (artist) => {
-        this.setState(prev => ({...prev, artist}))
-    }
-
-    setYouTubeId = (youTubeId) => {
-        this.setState(prev => ({...prev, youTubeId}))
-    }
-
-    render = () => {
-        
-    }
-
-}*/
 const EditSongModal = (props) => {
     const {song, songIndex, hideEditSongModalCallback, editSongCallback} = props;
 
@@ -44,9 +15,9 @@ const EditSongModal = (props) => {
             setYouTubeId(song.youTubeId);
         }
     }, [song])
-    //console.log(`${title}, ${artist}, ${youTubeId}`)
 
     const className = `modal${song !== null ? " is-visible" : ""}`;
+    // other ways to do this besides useEffect
 
 
 

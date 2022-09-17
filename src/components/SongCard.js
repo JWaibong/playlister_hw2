@@ -96,6 +96,8 @@ export default class SongCard extends React.Component {
         const song = this.props.song;
         const index = this.props.index + 1;
 
+        const {markSongForDeletionCallback} = this.props;
+
         // many ways to calculte itemClass
         let itemClass = `${this.state.draggedTo? "playlister-song-dragged-to" : "playlister-song"} ${this.state.isHover? "selected-list-card": "unselected-list-card"}`;
         return (
@@ -120,6 +122,7 @@ export default class SongCard extends React.Component {
                 </div>
                 <input id={`songdelete-${index}`} type={"button"} 
                             className={"playlister-button"} value={"✕"}
+                            onClick = {() => markSongForDeletionCallback(this.props.index)}
             /> 
             </div>
             </>
