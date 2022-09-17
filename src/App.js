@@ -7,7 +7,7 @@ import jsTPS from './common/jsTPS.js';
 
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
-
+import EditSong_Transaction from './transactions/EditSong_Transaction';
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
 
@@ -18,6 +18,7 @@ import PlaylistCards from './components/PlaylistCards.js';
 import SidebarHeading from './components/SidebarHeading.js';
 import SidebarList from './components/SidebarList.js';
 import Statusbar from './components/Statusbar.js';
+import EditSongModal from './components/EditSongModal';
 
 class App extends React.Component {
     constructor(props) {
@@ -36,7 +37,8 @@ class App extends React.Component {
         this.state = {
             listKeyPairMarkedForDeletion : null,
             currentList : null,
-            sessionData : loadedSessionData
+            sessionData : loadedSessionData,
+            songMarkedForEditing : null,
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -238,8 +240,8 @@ class App extends React.Component {
     // THIS FUNCTION BEGINS THE PROCESS OF PERFORMING AN UNDO
     undo = () => {
         if (this.tps.hasTransactionToUndo()) {
+            console.log("here")
             this.tps.undoTransaction();
-
             // MAKE SURE THE LIST GETS PERMANENTLY UPDATED
             this.db.mutationUpdateList(this.state.currentList);
         }
@@ -263,6 +265,31 @@ class App extends React.Component {
             this.showDeleteListModal();
         });
     }
+
+    markSongForEditing = (song, index) => {
+        //console.log(`${song.title}: ${index}`)
+        this.setState(prev => ({
+            ...prev,
+            songMarkedForEditing: song,
+            songIndexMarkedForEditing: index,
+        }))
+    }
+
+    editMarkedSong = (idx, oldSong, newSong) => {
+        if (oldSong.title === newSong.title && oldSong.artist === newSong.artist && oldSong.youTubeId === newSong.youTubeId) {
+            return;
+        }
+        //console.log(newSong)
+        this.state.currentList.songs[idx] = newSong
+        this.setState(prev => ({...prev, songMarkedForEditing : null,})) // make sure to update state after editing
+
+    }
+
+    addEditSongTransaction = (idx, oldSong, newSong) => {
+        let transaction = new EditSong_Transaction(this, idx, oldSong, newSong);
+        this.tps.addTransaction(transaction);
+    }
+
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
     showDeleteListModal() {
@@ -274,6 +301,18 @@ class App extends React.Component {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
+
+    showEditSongModal() {
+        let modal = document.getElementById("edit-song-modal");
+        modal.classList.add("is-visible");
+    }
+    // THIS FUNCTION IS FOR HIDING THE MODAL
+    hideEditSongModal = ()  => {
+        let modal = document.getElementById("edit-song-modal");
+        //console.log("hide")
+        modal.classList.remove("is-visible");
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -304,13 +343,20 @@ class App extends React.Component {
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
-                    moveSongCallback={this.addMoveSongTransaction} />
+                    moveSongCallback={this.addMoveSongTransaction}
+                    markSongForEditingCallback={this.markSongForEditing} />
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
+                />
+                <EditSongModal
+                    song={this.state.songMarkedForEditing}
+                    songIndex={this.state.songIndexMarkedForEditing}
+                    hideEditSongModalCallback={this.hideEditSongModal}
+                    editSongCallback={this.addEditSongTransaction}
                 />
             </div>
         );

@@ -7,7 +7,8 @@ export default class SongCard extends React.Component {
         this.state = {
             isDragging: false,
             draggedTo: false,
-            isHover: false
+            isHover: false,
+            currentlyBeingEdited: false,
         }
     }
     handleDragStart = (event) => {
@@ -73,10 +74,23 @@ export default class SongCard extends React.Component {
         }));
     }
 
+    handleDoubleClick = (event) => {
+        event.preventDefault();
+
+        /*this.setState(prev=> ({
+            ...prev,
+            currentlyBeingEdited: true
+        }))*/
+
+        this.props.markSongForEditingCallback(this.props.song, this.props.index);
+    }
+
     getItemNum = () => {
         return this.props.id.substring("playlist-song-".length);
         // substring of id starting from index 15
     }
+
+
 
     render() {
         const song = this.props.song;
@@ -98,6 +112,7 @@ export default class SongCard extends React.Component {
                 onDrop={this.handleDrop}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
+                onDoubleClick={this.handleDoubleClick}
                 draggable="true"
             >
                 <div>
