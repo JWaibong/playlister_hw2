@@ -17,8 +17,8 @@ const EditSongModal = (props) => {
     }, [song])
 
     const className = `modal${song !== null ? " is-visible" : ""}`;
-    // other ways to do this besides useEffect
 
+    
 
 
     return ( 

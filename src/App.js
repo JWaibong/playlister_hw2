@@ -467,7 +467,6 @@ class App extends React.Component {
         this.setState(prev => ({...prev, listMarkedForRenaming: list}));
     }
 
-    // TODO disable all buttons when editing/deleting/changing playlist name
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -526,7 +525,7 @@ class App extends React.Component {
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
-                    listKeyPair={this.state.listKeyPairMarkedForDeletion}
+                    listKeyPair={this.state.listKeyPairMarkedForDeletion} // this.props.listKeyPair const {lisKeyPair} = props
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
                 />
