@@ -6,15 +6,21 @@ export default class ListCard extends React.Component {
 
         this.state = {
             text: this.props.keyNamePair.name,
-            editActive: false,
+            //editActive: false,  // not used anymore
+            // might want to change this to be passed down thriough props
+            // to enable buttons correctly + make sure you cant rename two lists at the same time
+
         }
     }
     handleClick = (event) => {
+        const {keyNamePair, markListForRenaming} = this.props;
         if (event.detail === 1) {
             this.handleLoadList(event);
         }
         else if (event.detail === 2) {
-            this.handleToggleEdit(event);
+
+            markListForRenaming(keyNamePair);
+
         }
     }
     handleLoadList = (event) => {
@@ -28,11 +34,14 @@ export default class ListCard extends React.Component {
         event.stopPropagation();
         this.props.deleteListCallback(this.props.keyNamePair);
     }
+
+    /* not used anymore
     handleToggleEdit = (event) => {
+        this.props.markListForRenaming();
         this.setState({
             editActive: !this.state.editActive
         });
-    }
+    }*/
     handleUpdate = (event) => {
         this.setState({ text: event.target.value });
     }
@@ -46,13 +55,13 @@ export default class ListCard extends React.Component {
         let textValue = this.state.text;
         console.log("ListCard handleBlur: " + textValue);
         this.props.renameListCallback(key, textValue);
-        this.handleToggleEdit();
+        this.props.markListForRenaming(null);
     }
 
     render() {
-        const { keyNamePair, selected } = this.props;
+        const { keyNamePair, selected, listMarkedForRenaming } = this.props;
 
-        if (this.state.editActive) {
+        if (listMarkedForRenaming === keyNamePair) {
             return (
                 <input
                     id={"list-" + keyNamePair.name}

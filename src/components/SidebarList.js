@@ -7,7 +7,10 @@ export default class SidebarList extends React.Component {
                 keyNamePairs,
                 deleteListCallback, 
                 loadListCallback,
-                renameListCallback} = this.props;
+                renameListCallback,
+                markListForRenaming,
+                listMarkedForRenaming,
+            } = this.props;
         return (
             <div id="sidebar-list">
                 {
@@ -19,6 +22,8 @@ export default class SidebarList extends React.Component {
                             deleteListCallback={deleteListCallback}
                             loadListCallback={loadListCallback}
                             renameListCallback={renameListCallback}
+                            markListForRenaming={markListForRenaming}
+                            listMarkedForRenaming={listMarkedForRenaming}
                         />
                     ))
                 }
