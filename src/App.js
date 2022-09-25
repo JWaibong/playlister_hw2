@@ -473,17 +473,20 @@ class App extends React.Component {
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null; // canAddList = !canClose
+        let canAddList = !canClose
 
         if (this.state.listMarkedForRenaming !== null || this.state.listKeyPairMarkedForDeletion !== null || this.state.songMarkedForDeleting !== null || this.state.songMarkedForEditing !== null) {
             canAddSong = false;
             canUndo = false;
             canRedo = false;
             canClose = false;
+            canAddList = false;
         }
+
 
   
         //console.log(`${canClose}`)
-        console.log(this.state.listMarkedForRenaming)
+        //console.log(this.state.listMarkedForRenaming)
 
         return (
             <div id="root"
@@ -493,7 +496,7 @@ class App extends React.Component {
                 <Banner />
                 <SidebarHeading
                     createNewListCallback={this.createNewList}
-                    canAddList={!canClose}
+                    canAddList={canAddList}
                 />
                 <SidebarList
                     currentList={this.state.currentList}

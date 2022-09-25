@@ -71,6 +71,7 @@ export default class ListCard extends React.Component {
                     onBlur={this.handleBlur}
                     onChange={this.handleUpdate}
                     defaultValue={keyNamePair.name}
+                    autoFocus
                 />)
         }
         else {
