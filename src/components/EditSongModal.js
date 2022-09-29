@@ -32,9 +32,9 @@ const EditSongModal = (props) => {
                         <div id="edit-title">Title: </div>
                         <div id="edit-artist">Artist: </div>
                         <div id="edit-yt-id"> YouTube Id:</div>
-                        <input id="edit-title-input" value={title} onChange={e => {setTitle(e.target.value)}}/>
-                        <input id ="edit-artist-input" value={artist} onChange={e => {setArtist(e.target.value)}}/>
-                        <input id="edit-yt-id-input" value={youTubeId} onChange={e=> {setYouTubeId(e.target.value)}}/>
+                        <input id="edit-title-input" defaultValue={title} onChange={e => {setTitle(e.target.value)}}/>
+                        <input id ="edit-artist-input" defaultValue={artist} onChange={e => {setArtist(e.target.value)}}/>
+                        <input id="edit-yt-id-input" defaultValue={youTubeId} onChange={e=> {setYouTubeId(e.target.value)}}/>
                 </div>
                 <div class="modal-south">
                     <input

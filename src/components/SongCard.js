@@ -118,7 +118,7 @@ export default class SongCard extends React.Component {
                 draggable="true"
             >
                 <div>
-                {`${index}.`} <a id={`songlink-${index}`} href={`https://youtube.com/watch?v=${song.youTubeId}`}> {song.title} by {song.artist} </a>
+                {`${index}.`} <a id={`songlink-${index}`} href={`https://youtube.com/watch?v=${song.youTubeId}`} target={"_blank"} rel={"noreferrer"}> {song.title} by {song.artist} </a>
                 </div>
                 <input id={`songdelete-${index}`} type={"button"} 
                             className={"playlister-button"} value={"✕"}

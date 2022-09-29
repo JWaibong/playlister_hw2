@@ -180,15 +180,16 @@ class App extends React.Component {
     // THIS FUNCTION BEGINS THE PROCESS OF LOADING A LIST FOR EDITING
     loadList = (key) => {
         let newCurrentList = this.db.queryGetList(key);
+        this.tps.clearAllTransactions();
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : prevState.listKeyPairMarkedForDeletion,
             currentList: newCurrentList,
             sessionData: this.state.sessionData
-        }), () => {
+        }));
+        //, () => {
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
             // THE TRANSACTION STACK IS CLEARED
-            this.tps.clearAllTransactions();
-        });
+        //});
     }
     // THIS FUNCTION BEGINS THE PROCESS OF CLOSING THE CURRENT LIST
     closeCurrentList = () => {
@@ -202,8 +203,7 @@ class App extends React.Component {
         //() => {
             // REMOVED BECAUSE I WANT TO CLEAR TRANSACTIONS BEFORE SETTING NEW STATE 
             // AN AFTER EFFECT IS THAT WE NEED TO MAKE SURE
-            // THE TRANSACTION STACK IS CLEARED
-         //   this.forceUpdate();}
+            // THE TRANSACTION STACK IS CLEARED;}
          );
     }
     setStateWithUpdatedList(list) {
@@ -471,7 +471,7 @@ class App extends React.Component {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
-        let canClose = this.state.currentList !== null; // canAddList = !canClose
+        let canClose = this.state.currentList !== null;
         let canAddList = !canClose
 
         if (this.state.listMarkedForRenaming !== null || this.state.listKeyPairMarkedForDeletion !== null || this.state.songMarkedForDeleting !== null || this.state.songMarkedForEditing !== null) {
